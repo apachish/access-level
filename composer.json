@@ -22,7 +22,9 @@
     "extra": {
         "laravel": {
             "providers": [
-            "Apachish\\AccessLevel\\AccessLevelServiceProvider"
+            "Apachish\\AccessLevel\\AccessLevelServiceProvider",
+                "Apachish\\AccessLevel\\App\\Providers\\AccessLevelAuthServiceProvider"
+
             ]
         }
     }
