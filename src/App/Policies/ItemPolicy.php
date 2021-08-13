@@ -30,7 +30,6 @@ class ItemPolicy
      */
     public function view(User $user, Item $item)
     {
-        //
     }
 
     /**

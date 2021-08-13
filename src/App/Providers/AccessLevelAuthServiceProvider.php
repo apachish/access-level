@@ -1,6 +1,6 @@
 <?php
 
-namespace Dadsun\Demand\App\Providers;
+namespace Apachish\AccessLevel\App\Providers;
 
 use Apachish\AccessLevel\App\Policies\ItemPolicy;
 use Apachish\AccessLevel\Models\Item;
@@ -25,6 +25,7 @@ class AccessLevelAuthServiceProvider extends AuthServiceProvider
      */
     public function boot()
     {
+        dd("1");
         $this->registerPolicies();
     }
 }

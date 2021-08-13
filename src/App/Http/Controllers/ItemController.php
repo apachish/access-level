@@ -4,7 +4,7 @@ namespace Apachish\AccessLevel\App\Http\Controllers;
 
 use Apachish\AccessLevel\App\Http\Requests\ItemStore;
 use Apachish\AccessLevel\App\Http\Resources\ItemCollection;
-use Apachish\AccessLevel\App\Models\Item;
+use Apachish\AccessLevel\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Apachish\AccessLevel\App\Http\Resources\Item as ItemResource;
@@ -33,7 +33,7 @@ class ItemController extends Controller
         if($item == null) return $this->responseData(self::NOTFOUND, []);
 
         $data = [
-            "items" =>   new ItemResource($items)
+            "items" =>   new ItemResource($item)
         ];
         
         return $this->responseData(self::SUCCESS, $data);
