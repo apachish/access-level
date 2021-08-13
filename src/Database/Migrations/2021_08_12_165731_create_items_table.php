@@ -17,6 +17,12 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string("title",100);
             $table->string("description",1200);
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }

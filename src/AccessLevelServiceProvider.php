@@ -24,13 +24,7 @@ class AccessLevelServiceProvider extends ServiceProvider
 
     public function boot()
     {
-//        $this->app->make(EloquentFactory::class)->load(__DIR__ . '/Database/Factories');
-        $this->publishes([
-            __DIR__.'/Database/Factories/User.php' => database_path('factories/User.php')
-        ],'user-factory');
-        $this->publishes([
-            __DIR__.'/Database/Factories/User.php' => database_path('factories/User.php')
-        ],'user-factory');
+
         $this->loadDependencies()
             ->publishDependencies();
         $this->app->booted(function (){
@@ -41,6 +35,7 @@ class AccessLevelServiceProvider extends ServiceProvider
     private function loadDependencies()
     {
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
+        $this->loadFactoriesFrom(__DIR__ . '/Database/Factories');
 
         $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
 

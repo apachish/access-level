@@ -2,33 +2,24 @@
 
 namespace Apachish\AccessLevel\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Apachish\AccessLevel\Database\Factories\UserFactory;
 use App\Models\User as BaseUser;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends BaseUser implements JWTSubject
+class User extends BaseUser 
 {
 
-    // Rest omitted for brevity
-
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
+    protected static function newFactory()
     {
-        return $this->getKey();
+        return UserFactory::new();
+    }
+    
+    public function items()
+    {
+        return $this->hasMany(Item::class);
     }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
+    public function roles()
     {
-        return [];
+        return $this->belongsToMany(Role::class)->withTimestamps();
     }
 }

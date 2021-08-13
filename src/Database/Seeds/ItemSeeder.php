@@ -1,10 +1,11 @@
 <?php
 
-namespace Database\Seeders;
+namespace Apachish\AccessLevel\Database\Seeds;
 
 use Illuminate\Database\Seeder;
+use Apachish\AccessLevel\Models\Item as ItemModel;
 
-class Item extends Seeder
+class ItemSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +14,5 @@ class Item extends Seeder
      */
     public function run()
     {
-        //
     }
 }
