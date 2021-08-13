@@ -10,19 +10,19 @@ Route::middleware('api')
                     Route::post('/register', 'AuthController@register')->name("register");
                     Route::post('/login', 'AuthController@login')->name("login");
                 });
+            Route::middleware('auth:api')->group(function () {
+                Route::get('/send-email', 'UsersController@sendEmail');
+                Route::post('refresh', 'AuthController@refresh');
+
+                Route::post('/add/author/{user_id}', 'UsersController@addAuthor');
+            });
         });
 
         Route::middleware('auth:api')->group(function () {
-            Route::get('/send-email', 'UsersController@sendEmail');
-            Route::post('refresh', 'AuthController@refresh');
 
-            Route::prefix('items')->group(function () {
-                Route::get('/', 'ItemController@gets');
-                Route::get('/{item_id}', 'ItemController@get');
-                Route::post('create', 'ItemController@store');
-                Route::put('edit/{item_id}', 'ItemController@update');
-                Route::delete('destroy/{item_id}', 'ItemController@destroy');
-            });
+            Route::apiResource("items","ItemController")->parameters([
+                "items"=>'item_id'
+            ]);
 
         });
 

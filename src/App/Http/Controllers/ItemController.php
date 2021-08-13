@@ -11,44 +11,51 @@ use Apachish\AccessLevel\App\Http\Resources\Item as ItemResource;
 
 class ItemController extends Controller
 {
-    public function gets(Request $request)
+
+    public function index(Request $request)
     {
         $limit = $request->get("limit",10);
         $order = $request->get("order","DESC");
 
         $items = Item::orderBy("created_at",$order)
             ->simplePaginate($limit);
-        
+
         $data = [
           "items" =>   new ItemCollection($items)
         ];
-        
+
         return $this->responseData(self::SUCCESS, $data);
     }
 
-    public function get(Request $request,$item_id)
+    public function show(Request $request,$item_id)
     {
         $item = Item::find($item_id);
-        
+
         if($item == null) return $this->responseData(self::NOTFOUND, []);
+
+        $this->authorize('view',$item);
 
         $data = [
             "items" =>   new ItemResource($item)
         ];
-        
+
         return $this->responseData(self::SUCCESS, $data);
     }
 
     public function store(ItemStore $request)
     {
-        $item = Item::create($request->only(["title","description"]));
+        $user = auth()->user();
+        $this->authorize('create',Item::class);
+
+        $item = $user->items()->create($request->only(["title","description"]));
 
         $data = [
-            "items" =>   new ItemResource($items)
+            "items" =>   new ItemResource($item)
         ];
 
         return $this->responseData(self::SUCCESS, $data);
     }
+
 
     public function update(ItemStore $request,$item_id)
     {
@@ -56,14 +63,15 @@ class ItemController extends Controller
 
         if($item == null) return $this->responseData(self::NOTFOUND, []);
 
+        $this->authorize("update",$item);
         $item->update(
-          $request->only(["title","description"])  
+          $request->only(["title","description"])
         );
-        
+
         $item->refresh();
-        
+
         $data = [
-            "items" =>   new ItemResource($items)
+            "items" =>   new ItemResource($item)
         ];
 
         return $this->responseData(self::SUCCESS, $data);
@@ -74,7 +82,9 @@ class ItemController extends Controller
         $item = Item::find($item_id);
 
         if($item == null) return $this->responseData(self::NOTFOUND, []);
-        
+
+        $this->authorize("update",$item);
+
         $item->delete();
 
         return $this->responseData(self::SUCCESS, []);

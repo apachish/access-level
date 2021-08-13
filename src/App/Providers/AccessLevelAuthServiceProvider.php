@@ -4,8 +4,10 @@ namespace Apachish\AccessLevel\App\Providers;
 
 use Apachish\AccessLevel\App\Policies\ItemPolicy;
 use Apachish\AccessLevel\Models\Item;
+use Apachish\AccessLevel\Models\User;
 use Illuminate\Support\Facades\Gate;
 use App\Providers\AuthServiceProvider;
+use function Symfony\Component\String\s;
 
 class AccessLevelAuthServiceProvider extends AuthServiceProvider
 {
@@ -25,7 +27,10 @@ class AccessLevelAuthServiceProvider extends AuthServiceProvider
      */
     public function boot()
     {
-        dd("1");
+
+        Gate::define('user-admin', function (User $user) {
+            return $user->roles()->where("name", ["admin"])->count();
+        });
         $this->registerPolicies();
     }
 }

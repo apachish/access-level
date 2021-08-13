@@ -1,6 +1,17 @@
 # access-level
 Authentication performed by JWT Have three levels of admin, author and user access The list should only be created by the author admin Each admin has the ability to edit and delete the entire list and each author only has the ability to edit their own list Have an address to display the list to all users There is a section with the possibility of sending emails to all users
 
+install package 
+````
+composer require apachish/access-level
+````
+
+after install run command install table in database
+
+````
+php artisan migrate
+````
+
 ##config
 
 config laravel in file *./config/auth.php*
@@ -23,47 +34,31 @@ Change the following parameters in the corresponding file
             'hash' => false,
         ],
     ],
+        'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => \Apachish\AccessLevel\Models\User::class,
+        ],
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
+    ],
 
 ````
-Change your user model as below
+I have included a helper command to generate a key for you:
+
 ````
-<?php
-
-namespace App\Models;
-
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-class User extends Authenticatable implements JWTSubject
-{
-    use Notifiable;
-
-    // Rest omitted for brevity
-
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-}
+php artisan jwt:secret
 ````
 
+you can create admin by set email in .env parmter `ADMIN_USER_EMAIL`
 
+for create role admin and author and set user admin run command ,The following command
+````
+php artisan db:seed --class="Apachish\AccessLevel\Database\Seeds\RoleSeeder"
+````
 ##list api
 
 To register a user:
@@ -143,3 +138,18 @@ resulte
     }
 }
 ````
+
+all aunder api use header :
+
+````
+Accept: application/json
+Content-type: application/json
+Authorization:Bearer {{access_token}}
+````
+add user for author use api :
+
+http://127.0.0.1:8000/api/user/add/author/7
+
+list api
+![img.png](img.png)
+ 
